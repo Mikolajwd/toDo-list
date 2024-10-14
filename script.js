@@ -35,6 +35,8 @@ const prepareDOMEvents = () => {
     addBtn.addEventListener('click', addNewTodo)
     ulList.addEventListener('click', checkClick)
     popupCloseBtn.addEventListener('click', closePopup)
+    popupAddBtn.addEventListener('click', changeTodoText)
+    todoToEdit.addEventListener('click', editTodo)
 }
 
 const addNewTodo = () => {
@@ -45,8 +47,8 @@ const addNewTodo = () => {
 
         ulList.append(newTodo)
 
-        todoInput.value = " "
-        errorInfo.textContent = " "
+        todoInput.value = ""
+        errorInfo.textContent = ""
     } else {
         errorInfo.textContent = "wpisz treść zadania"
     }
@@ -62,13 +64,13 @@ const createToolsArea = () => {
     completeBtn.classList.add('complete')
     completeBtn.innerHTML = '<i class="fas fa-check"></i>'
 
-    const editBtn = document.querySelector('button')
+    const editBtn = document.createElement('button')
     editBtn.classList.add('edit')
     editBtn.textContent = 'EDIT'
 
     const deleteBtn = document.createElement('button')
     deleteBtn.classList.add('delete')
-    deleteBtn.innerHTML = '<i class = "fas fa-times"></i>'
+    deleteBtn.innerHTML = '<i class="fas fa-times"></i>'
 
     toolsPanel.append(completeBtn, editBtn, deleteBtn)
 
@@ -77,22 +79,19 @@ const createToolsArea = () => {
 
 const checkClick = (e) => {
     if (e.target.matches('.complete')){
-        console.log('complete');
         e.target.closest('li').classList.toggle('completed')
         e.target.classList.toggle('completed')
-
     } else if (e.target.matches('.edit')) {
-        console.log('open popup edit to do ');
-        editTodo()
+        editTodo(e)
     } else if (e.target.matches('.delete')){
         console.log('delete');
     }
 
 }
 
-
-
-const editTodo = () => {
+const editTodo = (e) => {
+    todoToEdit = e.target.closest('li')
+    popupInput.value = todoToEdit.firstChild.textContent
     popup.style.display = 'flex'
 }
 
@@ -100,6 +99,13 @@ const closePopup = (params) => {
     popup.style.display = 'none'
 }
 
+const changeTodoText = () => {
+    if (popupInput.value !== '') {
+        console.log('kliknieto save');
+        todoToEdit.firstChild.textContent = popupInput.value
+        popup.style.display = 'none'
+    }
+}
 
 
 
